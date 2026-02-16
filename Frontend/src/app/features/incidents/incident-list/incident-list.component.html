@@ -1,0 +1,143 @@
+<div class="dashboard-page">
+  <div class="container">
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <h1>Incident Dashboard</h1>
+
+      <button *ngIf="data.length > 0"
+              mat-raised-button
+              color="primary"
+              (click)="openCreateDialog()">
+        + Create Incident
+      </button>
+    </div>
+
+    <!-- Search + Filters -->
+    <div class="filters-row">
+
+      <!-- Search -->
+      <mat-form-field class="search-field" appearance="fill">
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput
+               placeholder="Search incidents"
+               (input)="onSearch($event.target.value)">
+      </mat-form-field>
+
+      <!-- Severity Filter -->
+      <mat-form-field>
+        <mat-label>Severity</mat-label>
+        <mat-select [(value)]="selectedSeverity"
+                    (selectionChange)="onFilterChange()">
+          <mat-option value="">All</mat-option>
+          <mat-option value="SEV1">SEV1</mat-option>
+          <mat-option value="SEV2">SEV2</mat-option>
+          <mat-option value="SEV3">SEV3</mat-option>
+          <mat-option value="SEV4">SEV4</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Status Filter -->
+      <mat-form-field>
+        <mat-label>Status</mat-label>
+        <mat-select [(value)]="selectedStatus"
+                    (selectionChange)="onFilterChange()">
+          <mat-option value="">All</mat-option>
+          <mat-option value="OPEN">OPEN</mat-option>
+          <mat-option value="MITIGATED">MITIGATED</mat-option>
+          <mat-option value="RESOLVED">RESOLVED</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrapper" *ngIf="data.length > 0; else noData">
+      <table mat-table [dataSource]="data" class="custom-table">
+
+        <!-- Title -->
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef (click)="sort('title')" class="sortable">
+            Title
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.title }}
+          </td>
+        </ng-container>
+
+        <!-- Severity -->
+        <ng-container matColumnDef="severity">
+          <th mat-header-cell *matHeaderCellDef>Severity</th>
+          <td mat-cell *matCellDef="let element">
+            <span class="badge" [ngClass]="element.severity.toLowerCase()">
+              {{ element.severity }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Status (NEW) -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let element">
+            <span class="badge status-badge"
+                  [ngClass]="element.status?.toLowerCase()">
+              {{ element.status }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Created Date (NEW – DATE ONLY) -->
+        <ng-container matColumnDef="createdAt">
+          <th mat-header-cell *matHeaderCellDef (click)="sort('createdAt')" class="sortable">
+            Created Date
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.createdAt | date:'dd MMM yyyy' }}
+          </td>
+        </ng-container>
+
+        <!-- Actions -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let element">
+            <div class="actions-wrapper">
+              <button mat-icon-button color="primary" (click)="viewIncident(element)">
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" (click)="openUpdateDialog(element)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="deleteIncident(element._id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Rows -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+      </table>
+
+      <mat-paginator
+        [length]="totalRecords"
+        [pageSize]="limit"
+        (page)="onPageChange($event)">
+      </mat-paginator>
+    </div>
+
+  </div>
+</div>
+
+<!-- No Data -->
+<ng-template #noData>
+  <div class="no-data">
+    <img src="/assets/empty.png" alt="No Records">
+    <h2>No Incidents Found</h2>
+    <p>Try adjusting your search or filters.</p>
+    <button mat-raised-button color="primary" (click)="openCreateDialog()">
+      + Create Incident
+    </button>
+  </div>
+</ng-template>

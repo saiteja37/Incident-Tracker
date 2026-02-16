@@ -1,0 +1,66 @@
+<div class="detail-container">
+
+  <div class="header">
+    <div>
+      <h2>{{ data.title }}</h2>
+      <p class="incident-id">#{{ data._id }}</p>
+    </div>
+
+    <button mat-icon-button class="close-btn" (click)="close()">
+  <mat-icon>close</mat-icon>
+</button>
+  </div>
+
+  <div class="content">
+
+    <div class="info-grid">
+
+      <div class="info-box">
+        <span class="label">Service</span>
+        <span class="value">{{ data.service }}</span>
+      </div>
+
+      <div class="info-box">
+        <span class="label">Owner</span>
+        <span class="value">{{ data.owner || 'Unassigned' }}</span>
+      </div>
+
+      <div class="info-box">
+        <span class="label">Severity</span>
+        <span class="badge severity"
+              [ngClass]="data.severity.toLowerCase()">
+          {{ data.severity }}
+        </span>
+      </div>
+
+      <div class="info-box">
+        <span class="label">Status</span>
+        <span class="badge status"
+              [ngClass]="data.status.toLowerCase()">
+          {{ data.status }}
+        </span>
+      </div>
+
+      <div class="info-box full-width">
+        <span class="label">Summary</span>
+        <p class="summary">
+          {{ data.summary || 'No summary provided.' }}
+        </p>
+      </div>
+
+      <div class="info-box full-width">
+        <span class="label">Created At</span>
+        <span class="value">
+          {{ data.createdAt | date:'medium' }}
+        </span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <button mat-stroked-button (click)="close()">Close</button>
+  </div>
+
+</div>
