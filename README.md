@@ -139,7 +139,7 @@ DELETE /api/incidents/:id
 - Improve UI responsiveness and accessibility
 
 ## 👨‍💻 Author
-Sai Teja  
+Sai Teja Kandadi
 Full Stack Developer – MEAN Stack
 
 ## 🎯 Final Notes
