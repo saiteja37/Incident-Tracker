@@ -50,7 +50,11 @@ Incident-Tracker/
    PORT=5000
    MONGO_URI=your_mongodb_connection_string
    ```
-4. Start backend server:
+4. (Optional) Seed database with sample records:
+   ```
+   npm run seed
+   ```
+5. Start backend server:
    ```
    npm run dev
    ```
@@ -91,19 +95,17 @@ http://localhost:5000/api
 ```
 POST /api/incidents
 ```
-Request Body:
-```json
-{
-  "title": "Server Down",
-  "description": "Production server is not responding",
-  "severity": "High",
-  "status": "Open"
-}
-```
+Includes request validation before storing data.
 
-### Get All Incidents
+### Fetch Incidents (Paginated)
 ```
-GET /api/incidents
+GET /api/incidents?page=1&limit=10
+```
+Supports server-side pagination.
+
+### Search / Filter / Sort (Server-Side)
+```
+GET /api/incidents?search=server&status=Open&sort=createdAt
 ```
 
 ### Get Single Incident
@@ -111,7 +113,7 @@ GET /api/incidents
 GET /api/incidents/:id
 ```
 
-### Update Incident
+### Update Incident Status
 ```
 PUT /api/incidents/:id
 ```
@@ -122,25 +124,25 @@ DELETE /api/incidents/:id
 ```
 
 ## 🏗 Design Decisions & Tradeoffs
-- Followed MVC architecture in backend (Models, Controllers, Routes) for separation of concerns and maintainability.
-- Implemented RESTful API design using proper HTTP methods and structured endpoints.
-- Used MongoDB for flexible schema handling of incident data. Tradeoff: Requires strong validation at application level.
-- Chose Angular for structured frontend architecture and scalability. Tradeoff: Slightly heavier initial setup compared to lightweight frameworks.
-- Stored sensitive configuration inside `.env` file to prevent exposing credentials in version control.
 
-## 🔮 Improvements With More Time
-- Implement JWT-based authentication and role-based authorization
-- Add pagination and filtering
-- Add input validation and centralized error handling
-- Implement unit and integration testing
-- Dockerize application
-- Deploy frontend and backend to cloud platforms
-- Add logging and monitoring system
-- Improve UI responsiveness and accessibility
+- Followed MVC architecture (Models, Controllers, Routes) to maintain separation of concerns and improve maintainability.
+- Implemented input validation during incident creation to ensure data integrity at API level.
+- Used MongoDB for flexible schema handling and scalability for incident records.
+- Seeded the database with ~200 records to simulate real-world data volume and properly test pagination, filtering, and sorting.
+- Implemented server-side pagination instead of client-side pagination to ensure scalability for large datasets.
+- Implemented server-side search, filtering, and sorting to optimize performance and reduce frontend load.
+- Designed API endpoints using REST principles for consistency and extensibility.
+- Angular was chosen for structured frontend architecture and long-term scalability.
+- Environment variables are managed through `.env` to secure sensitive configuration data.
+
+Tradeoffs:
+- Server-side filtering and pagination increases backend logic complexity but improves performance at scale.
+- MongoDB provides flexibility but requires strong validation to maintain data consistency.
+- Angular introduces more initial setup compared to lightweight frameworks but offers better maintainability for larger applications.
 
 ## 👨‍💻 Author
 Sai Teja Kandadi
 Full Stack Developer – MEAN Stack
 
 ## 🎯 Final Notes
-This project demonstrates end-to-end full-stack development capability, scalable backend design, Angular integration, and professional GitHub repository structuring suitable for production-level applications.
+This project demonstrates end-to-end full-stack development capability, scalable backend design, server-side data processing, Angular integration, and professional GitHub repository structuring suitable for production-level applications.
